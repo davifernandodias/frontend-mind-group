@@ -1,4 +1,4 @@
-import { ProductBarHeader } from "./ui/menubar-products";
+import { ProductBarHeader } from "./ui/header-collapse-products";
 import { ModeToggle } from "./ui/modeToggle";
 import ProfileIconClerk from "./ui/profile-icon-clerk";
 
