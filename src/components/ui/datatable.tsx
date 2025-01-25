@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import {
   ColumnDef,
@@ -9,7 +10,7 @@ import {
   SortingState,
   getSortedRowModel,
   getFilteredRowModel,
-  FilterFnOption
+  FilterFnOption,
 } from "@tanstack/react-table";
 
 import {
@@ -20,15 +21,34 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "./button";
-import { Input } from "./input";
+import {Button} from "./button";
+import {Input} from "./input";
+
+function normalizeString(value: string, whiteSpaceReplace = "-") {
+  const alphabetSpecialChars = "àáäâãèéëêìíïîòóöôùúüûñçßÿœæŕśńṕẃǵǹḿǘẍźḧ·/_,:;";
+  const alphabetCommonChars = "aaaaaeeeeiiiioooouuuuncsyoarsnpwgnmuxzh------";
+
+  const normalizedValue = value
+    .trim()
+    .toLowerCase()
+    .trim()
+    .replace(/ /g, whiteSpaceReplace)
+    .replace(/--/g, "-")
+    .replace(/[&/\\#,+()$~%.'":*?<>{}\[\]]/g, "")
+    .replace(new RegExp(alphabetSpecialChars.split("").join("|"), "g"), (c) =>
+      alphabetCommonChars.charAt(alphabetSpecialChars.indexOf(c))
+    );
+
+  return normalizedValue;
+}
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   pageSize?: number;
-  searchFields?: string[],
-  defaultSearch?: string
+  searchFields?: string[];
+  defaultSearch?: string;
+  searchPlaceholder?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -37,26 +57,30 @@ export function DataTable<TData, TValue>({
   pageSize = 10,
   searchFields = [],
   defaultSearch = "",
+  searchPlaceholder = "filtrar por id nome, email etc...",
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState(defaultSearch);
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
     getFilteredRowModel: getFilteredRowModel(),
     onGlobalFilterChange: setGlobalFilter,
-    onSortingChange: setSorting,
     filterFns: {
-      fuzzy: (row, _, search) => {
+      fuzzy: (row, _, value) => {
         const data = row.original;
-        return searchFields.some(field => {
-          const fieldValue = field === "companyName" ? data?.company?.name : data[field];
-          return (fieldValue || "").toString().toLowerCase().includes(search.toLowerCase());
-        });
-      }
+        const search = normalizeString(value);
+        data.companyName = data?.company?.name;
+
+        return searchFields.some((field) =>
+          normalizeString(data[field].toString()).includes(search)
+        );
+      },
     },
     globalFilterFn: "fuzzy" as FilterFnOption<TData>,
     state: {
@@ -74,14 +98,13 @@ export function DataTable<TData, TValue>({
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Pesquise o produto..."
+          placeholder={searchPlaceholder}
           value={globalFilter}
-          onChange={(event) =>
-            setGlobalFilter(event.target.value)
-          }
+          onChange={(event) => setGlobalFilter(event.target.value)}
           className="max-w-sm"
         />
       </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -125,13 +148,14 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  Sem produtos cadastrados.
+                  Sem resultados.
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
+
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"
