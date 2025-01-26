@@ -24,6 +24,7 @@ export default function Page() {
               name={product.name}
               description={product.description}
               price={product.price}
+              seeIsActive={true}
               />
             </>
           ))}
