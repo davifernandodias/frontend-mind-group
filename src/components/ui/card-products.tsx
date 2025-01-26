@@ -1,13 +1,16 @@
-  import { Card, CardContent, CardHeader, CardTitle } from "./card";
-  import { Button } from "./button";
+import { Card, CardContent, CardHeader, CardTitle } from "./card";
+import { Button } from "./button";
+import Link from "next/link";
 
   interface CardProductsProps {
-    name: string; // Nome do produto
-    description: string; // Descrição do produto
-    price: number; // Preço do produto
+    name: string; 
+    description: string; 
+    price: number; 
+    seeIsActive?: boolean;
   }
 
-  export default function CardProducts({ name, description, price }: CardProductsProps) {
+  export default  function CardProducts({ name, description, price, seeIsActive }: CardProductsProps) {
+
     return (
       <Card className="hover:shadow-lg hover:scale-105 transform transition duration-300">
         <CardHeader>
@@ -16,7 +19,7 @@
         <CardContent>
           <p className="text-gray-600 dark:text-gray-400">{description}</p>
           <p className="mt-2 font-bold text-gray-800 dark:text-gray-200">R$ {price.toFixed(2)}</p>
-          <Button className="mt-4">Ver</Button>
+          { seeIsActive &&  <Button className="mt-4"><Link href={"/"}>Ver</Link></Button> }
         </CardContent>
       </Card>
     );
