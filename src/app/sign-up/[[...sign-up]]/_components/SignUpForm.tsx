@@ -1,56 +1,30 @@
 "use client";
 
-import { useAuth, useSignUp } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
-import { toast } from "sonner";
-import { FormEvent, useState, useEffect } from "react";
-import VerificationInput from "./VerifyEmail";
+import { FormEvent, useState } from "react";
+
+export const dataUser = () => {
+
+}
 
 export default function LoginForm() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const router = useRouter();
-  const { isSignedIn, userId } = useAuth();
-  const { isLoaded, signUp } = useSignUp();
   
   const [firstName, setFirstName] = useState("");
+  
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailVerification, setEmailVerification] = useState(false);
 
-  useEffect(() => {
-    if (isSignedIn && userId) {
-      router.push(`/painel/${userId}`);
-    }
-  }, [isSignedIn, userId, router]);
 
-  if (!isLoaded) return null;
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      await signUp.create({
-        firstName: firstName,
-        lastName: lastName,
-        emailAddress: email,
-        password,
-      });
-      await signUp.prepareEmailAddressVerification({
-        strategy: "email_code",
-      });
-      setEmailVerification(true);
-    } catch (err) {
-      if (isClerkAPIResponseError(err)) {
-        const error = err.errors[0]?.message;
-        return toast.error(error);
-      }
-      toast.error("An error occurred. Please try again later.");
-    }
+
   };
 
-  if (emailVerification) {
-    return <VerificationInput />;
-  }
+
   return (
 <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
   <div className="sm:mx-auto sm:w-full sm:max-w-sm">
