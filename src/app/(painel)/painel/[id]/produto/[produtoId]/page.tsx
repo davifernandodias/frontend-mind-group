@@ -86,15 +86,17 @@ export default function ProductPage() {
         onProductDeleted={handleProductDeleted}
       />
 
-      <ModalEditProduct
-        idProduct={validId}
-        onProductUpdated={handleProductUpdate}
-        description={product.description}
-        name={product.name}
-        isUpdateDialogOpen={isUpdateDialogOpen}
-        setUpdateDialogOpen={setUpdateDialogOpen}
-        price={product.price}
-      />
+<ModalEditProduct
+  image={product.image}  // Passando a imagem como base64 ou URL para o Modal
+  idProduct={validId}
+  onProductUpdated={handleProductUpdate}
+  description={product.description}
+  name={product.name}
+  isUpdateDialogOpen={isUpdateDialogOpen}
+  setUpdateDialogOpen={setUpdateDialogOpen}
+  price={product.price}
+/>
+
     </div>
   );
 }

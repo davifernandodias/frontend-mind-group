@@ -128,11 +128,12 @@ export const deleteProduct = async (productId: number) => {
     console.error("Erro ao excluir produto:", err);
     throw err;
   }
-};export const updateProduct = async (
+};
+
+
+export const updateProduct = async (
   productId: number,
-  name: string,
-  description: string,
-  price: string
+  formData: FormData
 ) => {
   try {
     const token = localStorage.getItem("token");
@@ -144,9 +145,8 @@ export const deleteProduct = async (productId: number) => {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, description, price }),
+        body: formData, // Enviando FormData no corpo da requisição
       }
     );
 

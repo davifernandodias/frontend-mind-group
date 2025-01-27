@@ -18,6 +18,7 @@ interface ModalEditProductProps {
   name: string;
   description: string;
   price: number;
+  image: unknown
   onProductUpdated: () => void; // Callback para notificar o componente pai
 }
 
@@ -33,12 +34,21 @@ export default function ModalEditProduct({
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState(initialName);
   const [description, setDescription] = useState(initialDescription);
+  const [image, setImage] = useState<File | null>(null); // Alterando para File | null
   const [price, setPrice] = useState(initialPrice);
-
   const handleEditProduct = async () => {
     setIsLoading(true);
     try {
-      await updateProduct(idProduct, name, description, price.toString());
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("description", description);
+      formData.append("price", price.toString());
+  
+      if (image) {
+        formData.append("image", image); // Adiciona a imagem ao FormData
+      }
+  
+      await updateProduct(idProduct, formData); // Envia o FormData para a API
       setUpdateDialogOpen(false); // Fecha o modal após sucesso
       onProductUpdated(); // Notifica o componente pai
       console.log("Produto atualizado com sucesso");
@@ -48,6 +58,8 @@ export default function ModalEditProduct({
       setIsLoading(false);
     }
   };
+  
+  
 
   return (
     <AlertDialog open={isUpdateDialogOpen} onOpenChange={setUpdateDialogOpen}>
@@ -69,6 +81,19 @@ export default function ModalEditProduct({
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
           </div>
+          <div>
+              <label htmlFor="image" className="text-sm font-medium">
+                Imagem
+              </label>
+              <input
+                id="image"
+                name="image"
+                type="file"
+                className="mt-1"
+                accept="image/*"
+                onChange={(e) => setImage(e.target.files?.[0] || null)}
+              />
+            </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Descrição
