@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { deleteProduct } from "@/services/productService";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -7,18 +9,38 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "./alert-dialog"; // Certifique-se de que está importando o wrapper correto
+} from "./alert-dialog";
 import { Button } from "./button";
 
 interface ModalConfirmRemoveProps {
   isDeleteDialogOpen: boolean;
   setDeleteDialogOpen: (value: boolean) => void;
+  idProduct: number;
+  onProductDeleted: () => void; // Callback para notificar o componente pai
 }
 
 export default function ModalConfirmRemove({
   isDeleteDialogOpen,
   setDeleteDialogOpen,
+  idProduct,
+  onProductDeleted,
 }: ModalConfirmRemoveProps) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleDeleteProduct = async () => {
+    setIsLoading(true);
+    try {
+      await deleteProduct(idProduct);
+      setDeleteDialogOpen(false); // Fecha o modal após sucesso
+      onProductDeleted(); // Notifica o componente pai
+      console.log("Produto excluído com sucesso!");
+    } catch (err) {
+      console.error("Erro ao excluir produto:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <AlertDialog open={isDeleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
       <AlertDialogContent
@@ -29,7 +51,8 @@ export default function ModalConfirmRemove({
             Confirmar Exclusão
           </AlertDialogTitle>
           <AlertDialogDescription className="text-sm text-gray-600 mt-2">
-            Tem certeza que deseja excluir este produto? Essa ação não pode ser desfeita.
+            Tem certeza que deseja excluir este produto? Essa ação não pode ser
+            desfeita.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="mt-4 flex flex-col space-y-2 sm:space-y-0 sm:flex-row sm:justify-end sm:space-x-2">
@@ -37,14 +60,19 @@ export default function ModalConfirmRemove({
             variant="default"
             className="bg-gray-200 text-gray-800 hover:bg-gray-300 w-full sm:w-auto"
             onClick={() => setDeleteDialogOpen(false)}
+            disabled={isLoading}
           >
             Cancelar
           </Button>
           <Button
             variant="destructive"
-            className="bg-red-600 text-white hover:bg-red-700 w-full sm:w-auto"
+            onClick={handleDeleteProduct}
+            className={`bg-red-600 text-white hover:bg-red-700 w-full sm:w-auto ${
+              isLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            disabled={isLoading}
           >
-            Excluir
+            {isLoading ? "Excluindo..." : "Excluir"}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

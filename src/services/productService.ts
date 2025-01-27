@@ -2,15 +2,15 @@ const urlApi = process.env.NEXT_PUBLIC_SECRET_URL_API;
 
 
 // productService.ts
-export const token = localStorage.getItem("token");
 
 export const fetchProducts = async () => {
   try {
-    console.log("Token no front:", token); // Verificando o token
+    const token = localStorage.getItem("token");
+    console.log("Token no front:", token); 
 
     if (!token) {
       console.error("Token não encontrado no localStorage");
-      return []; // Retorna um array vazio caso o token não seja encontrado
+      return [];
     }
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_SECRET_URL_API}/products`, {
@@ -46,7 +46,7 @@ export const createProduct = async (productData: {
   try {
     const userString = localStorage.getItem("user");
     const user = userString ? JSON.parse(userString) : null;
-    const userId = user ? user.id : undefined;  // Pegando o ID do usuário
+    const userId = user ? user.id : undefined;  
     const token = localStorage.getItem("token") || undefined;
     
 
@@ -55,7 +55,7 @@ export const createProduct = async (productData: {
       method: "POST",
       headers: {
         'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json', // Certifique-se de enviar como JSON
+        'Content-Type': 'application/json', 
       },
       body: JSON.stringify({
         name: productData.name,
@@ -71,7 +71,7 @@ export const createProduct = async (productData: {
     }
 
     const data = await response.json();
-    return data; // Retorna o produto criado, incluindo o ID gerado
+    return data; 
   } catch (err) {
     console.error("Erro ao criar produto:", err);
     throw err;
@@ -79,3 +79,104 @@ export const createProduct = async (productData: {
 };
 
 
+export const fetchProductById = async (productId: number) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("Token não encontrado no localStorage");
+      return null;
+    }
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SECRET_URL_API}/products/${productId}`, {
+      method: "GET",
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erro ao buscar produto: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;  
+  } catch (err) {
+    console.error("Erro ao buscar produto:", err);
+    throw err;
+  }
+};
+
+export const deleteProduct = async (productId: number) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("Token não encontrado no localStorage");
+      return null;
+    }
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SECRET_URL_API}/products/${productId}`,
+      {
+        method: "DELETE",
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Erro ao excluir produto: ${response.statusText}`);
+    }
+
+    return { success: true }; // Retorno explícito indicando sucesso
+  } catch (err) {
+    console.error("Erro ao excluir produto:", err);
+    throw err;
+  }
+};
+export const updateProduct = async (
+  productId: number,
+  name: string,
+  description: string,
+  price: string
+) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("Token não encontrado no localStorage");
+      return null;
+    }
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SECRET_URL_API}/products/${productId}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          description,
+          price,
+        }), // Incluindo o body com os dados a serem atualizados
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Erro ao atualizar esse produto: ${response.statusText}`
+      );
+    }
+
+    return { success: true }; // Retorno explícito indicando sucesso
+  } catch (err) {
+    console.error("Erro ao atualizar produto:", err);
+    throw err;
+  }
+};
