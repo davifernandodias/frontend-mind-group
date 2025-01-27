@@ -1,30 +1,35 @@
-
-import ProductsPage from "@/templates/products";
-import UserDataTable from "./datatable/_components/users-datatable";
+"use client"
+import { useState, useEffect } from "react";
+import { fetchProducts } from "@/services/productService";
+import { Product } from "@/interfaces/productInterfaces";
 import FormCreateProduct from "@/components/FormCreateProduct";
+import UserDataTable from "./datatable/_components/users-datatable";
 
-async function fetchUsers() {
-  const response = await fetch("https://jsonplaceholder.typicode.com/users");
-  return response.json();
-}
+export default function Page() {
+  const [products, setProducts] = useState<Product[]>([]);
 
-export default async function Page() {
-  const users = await fetchUsers();
+  // Carrega os produtos inicialmente
+  useEffect(() => {
+    const loadProducts = async () => {
+      const data = await fetchProducts();  // Função para buscar os produtos
+      setProducts(data);
+    };
+
+    loadProducts();
+  }, []);  // Apenas carrega os produtos uma vez ao montar o componente
+
+  // Função para adicionar um produto à lista
+  const handleAddProduct = (newProduct: Product) => {
+    setProducts((prevProducts) => [...prevProducts, newProduct]);  // Adiciona o novo produto na lista existente
+  };
 
   return (
-    <ProductsPage>
-      <div className="flex flex-col lg:flex-row lg:space-x-6 space-y-6 lg:space-y-0 p-6 ">
-        {/* Formulário */}
-      <FormCreateProduct />
+    <div className="flex space-x-4">
+      {/* Formulário de criação de produto */}
+      <FormCreateProduct onAddProduct={handleAddProduct} />
 
-        {/* Tabela */}
-
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4 dark:text-white">Produtos</h1>
-          <UserDataTable users={users} />
-        </div>
-      </div>
-      
-    </ProductsPage>
+      {/* Tabela de produtos */}
+      <UserDataTable product={products} />
+    </div>
   );
 }

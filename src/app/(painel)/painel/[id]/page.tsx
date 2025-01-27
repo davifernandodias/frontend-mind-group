@@ -1,53 +1,47 @@
 "use client"
+
+import { useEffect, useState } from "react";
 import CardProducts from "@/components/ui/card-products";
 import Graphics from "@/components/Graphics";
-// import { handleUserCreated } from "@/services/userServices";
-
+import { Product } from "@/interfaces/productInterfaces";
+import { fetchProducts } from "@/services/productService"; // Importando o serviço de produtos
 
 
 export default function Page() {
-  const user  =  {
-    id: "dakdak",
-    email: "usua2rio2@example.com",
-    firstName: "Jodada2hn",
-    lastName: "Do222e",
-    password: "senha2123"
-  
-  }
+  const [products, setProducts] = useState<Product[]>([]); // Definindo o tipo como Product[]
 
-  const handleGetUsers = async () => {
-    console.log(user)
-    // handleUserCreated(user)
-    console.log(user)
-  }
+  useEffect(() => {
+    const fetchAndSetProducts = async () => {
+      try {
+        const data = await fetchProducts();  // Usando o serviço para buscar os produtos
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
 
-  const products = [
-    { name: "Produto 1", description: "Descrição do produto 1", price: 59.99 },
-    { name: "Produto 2", description: "Descrição do produto 2", price: 99.99 },
-    { name: "Produto 3", description: "Descrição do produto 3", price: 149.99 },
-  ];
+    fetchAndSetProducts();
+  }, []); // Esse efeito vai rodar apenas uma vez, ao carregar a página
 
   return (
-      <div className="container mx-auto p-6">
-        {/* Linha de Gráficos */}
-        <Graphics />
+    <div className="container mx-auto p-6">
+      {/* Linha de Gráficos */}
+      <Graphics />
 
-          <p className="text-center font-semibold text-2xl -mt-5" onClick={handleGetUsers} >Em alta</p>
-        {/* Linha de Cards dos Produtos */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <p className="text-center font-semibold text-2xl -mt-5" >Em alta</p>
 
-          {products.map((product, index) => (
-            <>
-            <CardProducts
-              key={index}
-              name={product.name}
-              description={product.description}
-              price={product.price}
-              seeIsActive={true}
-              />
-            </>
-          ))}
-        </div>
+      {/* Linha de Cards dos Produtos */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {products.slice(0, 3).map((product) => ( // Limitando para 3 produtos
+          <CardProducts
+            key={product.id}
+            name={product.name}
+            description={product.description}
+            price={product.price}
+            seeIsActive={true}
+          />
+        ))}
       </div>
+    </div>
   );
 }

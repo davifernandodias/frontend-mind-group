@@ -1,15 +1,11 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/datatable";
-import { User } from "@clerk/nextjs/server";
+import { Product } from "@/interfaces/productInterfaces";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-
-export const columns: ColumnDef<User>[] = [
+// Definindo as colunas para a tabela de produtos
+export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -25,7 +21,7 @@ export const columns: ColumnDef<User>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Name
+          Nome
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -35,54 +31,45 @@ export const columns: ColumnDef<User>[] = [
     },
   },
   {
-    accessorKey: "username",
+    accessorKey: "description",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Username
+          Descrição
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
+    cell: ({ row }) => {
+      return <div>{row.getValue("description")}</div>;
+    },
   },
   {
-    accessorKey: "email",
+    accessorKey: "price",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Preço
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-  },
-  {
-    accessorKey: "company.name",
-    id: "companyName",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Company
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
+    cell: ({ row }) => {
+      return <div>{row.getValue("price")}</div>;
     },
   },
 ];
 
 interface Props {
-  users: User[];
+  product: Product[];  // Certifique-se de que a prop é plural (array)
 }
 
-export default function UserDataTable({ users }: Props) {
-  return <DataTable columns={columns} data={users} pageSize={5} searchFields={["id", "name", "username", "email", "companyName"]}/>;
+export default function UserDataTable({ product }: Props) {
+  return <DataTable columns={columns} data={product} pageSize={5} searchFields={["id", "name", "description", "price"]} />;
 }
