@@ -1,29 +1,8 @@
-"use client";
-
 import React from "react";
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
-  SortingState,
-  getSortedRowModel,
-  getFilteredRowModel,
-  FilterFnOption,
-} from "@tanstack/react-table";
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { ColumnDef, flexRender, useReactTable, SortingState, FilterFnOption, getCoreRowModel, getPaginationRowModel, getSortedRowModel, getFilteredRowModel } from "@tanstack/react-table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "./button";
 import { Input } from "./input";
-import { useParams, useRouter } from "next/navigation";
 
 function normalizeString(value: string, whiteSpaceReplace = "-") {
   const alphabetSpecialChars = "àáäâãèéëêìíïîòóöôùúüûñçßÿœæŕśńṕẃǵǹḿǘẍźḧ·/_,:;";
@@ -32,7 +11,6 @@ function normalizeString(value: string, whiteSpaceReplace = "-") {
   const normalizedValue = value
     .trim()
     .toLowerCase()
-    .trim()
     .replace(/ /g, whiteSpaceReplace)
     .replace(/--/g, "-")
     .replace(/[&/\\#,+()$~%.'":*?<>{}\[\]]/g, "")
@@ -58,13 +36,10 @@ export function DataTable<TData, TValue>({
   pageSize = 10,
   searchFields = [],
   defaultSearch = "",
-  searchPlaceholder = "filtrar por id nome, email etc...",
+  searchPlaceholder = "Filtrar por ID, nome, descrição, etc...",
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState(defaultSearch);
-  const router = useRouter(); 
-  const params = useParams<{ id: string; item: string }>();
-  const { id } = params;
 
   const table = useReactTable({
     data,
@@ -79,7 +54,6 @@ export function DataTable<TData, TValue>({
       fuzzy: (row, _, value) => {
         const data = row.original;
         const search = normalizeString(value);
-        data.companyName = data?.company?.name;
 
         return searchFields.some((field) =>
           normalizeString(data[field].toString()).includes(search)
@@ -118,10 +92,7 @@ export function DataTable<TData, TValue>({
                   <TableHead key={header.id}>
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 ))}
               </TableRow>
@@ -130,28 +101,17 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  className="cursor-pointer hover:bg-gray-100"
-                  onClick={() => router.push(`/painel/${id}/produto/${row.id}`)} // Navega ao clicar na linha.
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id} className="cursor-pointer hover:bg-gray-100">
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   Sem resultados.
                 </TableCell>
               </TableRow>
@@ -161,20 +121,10 @@ export function DataTable<TData, TValue>({
       </div>
 
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
+        <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
           Anterior
         </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
+        <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
           Próxima
         </Button>
       </div>
