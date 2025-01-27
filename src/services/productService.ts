@@ -6,7 +6,6 @@ const urlApi = process.env.NEXT_PUBLIC_SECRET_URL_API;
 export const fetchProducts = async () => {
   try {
     const token = localStorage.getItem("token");
-    console.log("Token no front:", token); 
 
     if (!token) {
       console.error("Token não encontrado no localStorage");
@@ -21,15 +20,12 @@ export const fetchProducts = async () => {
       },
     });
 
-    console.log("Status da resposta:", response.status);
-    console.log("Cabeçalhos da resposta:", response.headers);
 
     if (!response.ok) {
       throw new Error(`Erro ao buscar produtos: ${response.statusText}`);
     }
 
     const data = await response.json();
-    console.log("Produtos:", data);
     return data;  
     
   } catch (err) {
@@ -60,7 +56,6 @@ export const createProduct = async (formData: FormData) => {
     }
 
     const data = await response.json();
-    console.log("Produto criado:", data);  // Log para verificar a resposta
     return data;
   } catch (err) {
     console.error("Erro ao criar produto:", err);

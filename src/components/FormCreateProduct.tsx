@@ -30,7 +30,6 @@ export default function FormCreateProduct({ onAddProduct }: FormCreateProductPro
 
       // Enviar o FormData para o backend para criação do produto
       const newProduct = await createProduct(formData); // Passa o FormData para o backend
-      console.log(newProduct);
 
       // Adiciona o novo produto à lista
       onAddProduct(newProduct);

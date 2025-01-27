@@ -33,9 +33,8 @@ export default function ModalConfirmRemove({
       await deleteProduct(idProduct);
       setDeleteDialogOpen(false); // Fecha o modal após sucesso
       onProductDeleted(); // Notifica o componente pai
-      console.log("Produto excluído com sucesso!");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      console.error("Erro ao excluir produto:", err);
     } finally {
       setIsLoading(false);
     }

@@ -51,9 +51,8 @@ export default function ModalEditProduct({
       await updateProduct(idProduct, formData); // Envia o FormData para a API
       setUpdateDialogOpen(false); // Fecha o modal após sucesso
       onProductUpdated(); // Notifica o componente pai
-      console.log("Produto atualizado com sucesso");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      console.error("Erro ao atualizar produto:", err);
     } finally {
       setIsLoading(false);
     }

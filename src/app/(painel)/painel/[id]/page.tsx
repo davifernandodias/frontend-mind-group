@@ -5,13 +5,34 @@ import CardProducts from "@/components/ui/card-products";
 import Graphics from "@/components/Graphics";
 import { Product } from "@/interfaces/productInterfaces";
 import { fetchProducts } from "@/services/productService"; // Importando o serviço de produtos
+import {  useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]); // Definindo o tipo como Product[]
   const [loading, setLoading] = useState<boolean>(true); // Estado para controlar o carregamento
+  
   const [error, setError] = useState<string | null>(null); // Estado para controlar erros
+  // eslint-disable-next-line prefer-const
+  const params = useParams<{ user: string }>();
+  let userId = JSON.parse(localStorage.getItem("user") || '{}')?.id;
+
+  const { id } = params
+  const router = useRouter();
 
   useEffect(() => {
+
+    if(id !== userId){
+      router.push(`/painel/${userId}`);  
+      console.log("rota errada")
+
+    }else{
+
+    
+      
+
+
+    
     const fetchAndSetProducts = async () => {
       try {
         const data = await fetchProducts();  // Usando o serviço para buscar os produtos
@@ -29,6 +50,7 @@ export default function Page() {
     };
 
     fetchAndSetProducts();
+    }
   }, []); // Esse efeito vai rodar apenas uma vez, ao carregar a página
 
   if (loading) {

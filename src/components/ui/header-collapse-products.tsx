@@ -20,7 +20,7 @@ export function ProductBarHeader() {
 <MenubarMenu>
   <MenubarTrigger className="text-sm">Produtos</MenubarTrigger>
   <MenubarContent>
-    <MenubarItem onClick={() => console.log(id)}>
+    <MenubarItem >
       <Link href={`/painel/${id}/produto`}>Ver Produtos</Link><MenubarShortcut>⌘</MenubarShortcut>
     </MenubarItem>
   </MenubarContent>
