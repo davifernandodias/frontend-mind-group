@@ -37,46 +37,36 @@ export const fetchProducts = async () => {
     throw err;
   }
 };
-export const createProduct = async (productData: {
-  name: string;
-  description: string;
-  price: number;
-  image: File | null;
-}) => {
+export const createProduct = async (formData: FormData) => {
   try {
     const userString = localStorage.getItem("user");
     const user = userString ? JSON.parse(userString) : null;
     const userId = user ? user.id : undefined;  
     const token = localStorage.getItem("token") || undefined;
-    
-
 
     const response = await fetch(`${urlApi}/products/${userId}`, {
       method: "POST",
       headers: {
         'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json', 
+        // Não defina 'Content-Type' como 'application/json' aqui
+        // O fetch irá automaticamente ajustar o Content-Type para multipart/form-data
       },
-      body: JSON.stringify({
-        name: productData.name,
-        description: productData.description,
-        price: productData.price,
-        image: productData.image ? productData.image : null,
-      }),
+      body: formData,  // Passa o FormData para o body da requisição
     });
-    
 
     if (!response.ok) {
       throw new Error(`Erro ao criar o produto: ${response.statusText}`);
     }
 
     const data = await response.json();
-    return data; 
+    console.log("Produto criado:", data);  // Log para verificar a resposta
+    return data;
   } catch (err) {
     console.error("Erro ao criar produto:", err);
     throw err;
   }
 };
+
 
 
 export const fetchProductById = async (productId: number) => {
@@ -137,8 +127,7 @@ export const deleteProduct = async (productId: number) => {
     console.error("Erro ao excluir produto:", err);
     throw err;
   }
-};
-export const updateProduct = async (
+};export const updateProduct = async (
   productId: number,
   name: string,
   description: string,
@@ -146,11 +135,7 @@ export const updateProduct = async (
 ) => {
   try {
     const token = localStorage.getItem("token");
-
-    if (!token) {
-      console.error("Token não encontrado no localStorage");
-      return null;
-    }
+    if (!token) throw new Error("Token não encontrado");
 
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SECRET_URL_API}/products/${productId}`,
@@ -160,23 +145,17 @@ export const updateProduct = async (
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          name,
-          description,
-          price,
-        }), // Incluindo o body com os dados a serem atualizados
+        body: JSON.stringify({ name, description, price }),
       }
     );
 
     if (!response.ok) {
-      throw new Error(
-        `Erro ao atualizar esse produto: ${response.statusText}`
-      );
+      throw new Error(`Erro ao atualizar produto: ${response.statusText}`);
     }
 
-    return { success: true }; // Retorno explícito indicando sucesso
-  } catch (err) {
-    console.error("Erro ao atualizar produto:", err);
-    throw err;
+    return { success: true };
+  } catch (error) {
+    console.error("Erro ao atualizar produto:", error);
+    throw error;
   }
 };

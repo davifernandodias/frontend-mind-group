@@ -11,7 +11,6 @@ import { Product } from "@/interfaces/productInterfaces";
 interface FormCreateProductProps {
   onAddProduct: (newProduct: Product) => void; // A função que será chamada ao adicionar um novo produto
 }
-
 export default function FormCreateProduct({ onAddProduct }: FormCreateProductProps) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -21,15 +20,24 @@ export default function FormCreateProduct({ onAddProduct }: FormCreateProductPro
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const newProduct = await createProduct({ name, description, price, image });
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("description", description);
+      formData.append("price", price.toString());
+      if (image) {
+        formData.append("image", image); // Adiciona a imagem no FormData
+      }
+
+      // Enviar o FormData para o backend para criação do produto
+      const newProduct = await createProduct(formData); // Passa o FormData para o backend
       console.log(newProduct);
-      
+
       // Adiciona o novo produto à lista
       onAddProduct(newProduct);
-      
+
       // Exibe uma notificação de sucesso
       toast.success("Produto criado com sucesso!");
-      
+
       // Limpa os campos do formulário
       setName('');
       setDescription('');

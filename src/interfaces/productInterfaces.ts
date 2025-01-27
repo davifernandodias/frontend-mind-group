@@ -3,5 +3,5 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  image: string | null; // Dependendo do seu modelo de dados, pode ser string ou null
+  image: string | null; // O tipo pode ser string, ou null, dependendo de como o backend retorna a imagem
 }
