@@ -11,6 +11,7 @@ import { Product } from "@/interfaces/productInterfaces";
 interface FormCreateProductProps {
   onAddProduct: (newProduct: Product) => void; // A função que será chamada ao adicionar um novo produto
 }
+
 export default function FormCreateProduct({ onAddProduct }: FormCreateProductProps) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -19,6 +20,19 @@ export default function FormCreateProduct({ onAddProduct }: FormCreateProductPro
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Verifica se a imagem é maior que 20KB
+    if (image && image.size > 20 * 1024) {
+      toast.error("A imagem não pode exceder 20KB.");
+      return;
+    }
+
+    // Validação do preço
+    if (price <= 0 || price > 99999) {
+      toast.error("O preço deve ser maior que 0 e até 5 dígitos.");
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -45,7 +59,6 @@ export default function FormCreateProduct({ onAddProduct }: FormCreateProductPro
     } catch (err) {
       console.error("Erro ao criar produto:", err);
       
-      // Exibe uma notificação de erro
       toast.error("Erro ao criar o produto. Tente novamente.");
     }
   };
@@ -73,6 +86,7 @@ export default function FormCreateProduct({ onAddProduct }: FormCreateProductPro
                 className="mt-1"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                maxLength={100} // Limite de 100 caracteres
               />
             </div>
 
@@ -88,6 +102,7 @@ export default function FormCreateProduct({ onAddProduct }: FormCreateProductPro
                 className="mt-1"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                maxLength={100} // Limite de 100 caracteres
               />
             </div>
 
@@ -104,6 +119,8 @@ export default function FormCreateProduct({ onAddProduct }: FormCreateProductPro
                 className="mt-1"
                 value={price}
                 onChange={(e) => setPrice(Number(e.target.value))}
+                min={0.01} // O valor mínimo permitido é maior que 0
+                max={99999} // Limite máximo de 5 dígitos
               />
             </div>
 

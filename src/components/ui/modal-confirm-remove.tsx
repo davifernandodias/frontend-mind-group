@@ -1,7 +1,7 @@
-"use client";
-
 import { useState } from "react";
 import { deleteProduct } from "@/services/productService";
+import { useRouter } from "next/navigation";
+
 import {
   AlertDialog,
   AlertDialogContent,
@@ -26,15 +26,27 @@ export default function ModalConfirmRemove({
   onProductDeleted,
 }: ModalConfirmRemoveProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleDeleteProduct = async () => {
     setIsLoading(true);
     try {
-      await deleteProduct(idProduct);
+      await deleteProduct(idProduct); // Deletando o produto
       setDeleteDialogOpen(false); // Fecha o modal após sucesso
       onProductDeleted(); // Notifica o componente pai
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      
+      // Obtendo o userId do localStorage
+      const userId = JSON.parse(localStorage.getItem("user") || '{}')?.id;
+
+      // Redirecionando para a página do painel do usuário após exclusão
+      if (userId) {
+        router.push(`/painel/${userId}`);  // Rota correta do painel com o userId
+      } else {
+        console.error("User ID not found in localStorage");
+      }
+
     } catch (err) {
+      console.error("Error deleting product:", err);
     } finally {
       setIsLoading(false);
     }

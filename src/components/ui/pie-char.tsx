@@ -18,52 +18,75 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 190, fill: "var(--color-other)" },
-]
-
+import { fetchProducts } from "@/services/productService"
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
+  low: {
+    label: "Até R$ 200",
+    color: "blue",
   },
-  chrome: {
-    label: "Chrome",
+  medium: {
+    label: "De R$ 200 a R$ 700",
     color: "hsl(var(--chart-1))",
   },
-  safari: {
-    label: "Safari",
-    color: "hsl(var(--chart-2))",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
+  high: {
+    label: "Acima de R$ 1000",
+    color: "red",
   },
 } satisfies ChartConfig
 
 export function PieCharData() {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
+  const [products, setProducts] = React.useState<any[]>([])
+  const [chartData, setChartData] = React.useState<any[]>([])
+
+  // Função para processar os dados dos produtos e organizar por faixa de preço
+  const processData = (products: any[]) => {
+    const priceCategories: { [key: string]: number } = { low: 0, medium: 0, high: 0 }
+
+    // Processa os produtos por faixa de preço
+    products.forEach((product) => {
+      if (product.price <= 200) {
+        priceCategories.low += 1
+      } else if (product.price > 200 && product.price <= 700) {
+        priceCategories.medium += 1
+      } else if (product.price > 1000) {
+        priceCategories.high += 1
+      }
+    })
+
+    // Mapeia os dados para a estrutura do gráfico
+    const data = Object.keys(priceCategories).map((key) => ({
+      browser: chartConfig[key]?.label || key,
+      visitors: priceCategories[key],
+      fill: chartConfig[key]?.color || "gray",
+    }))
+
+    setChartData(data)
+  }
+
+  // Faz a requisição dos produtos e processa os dados
+  React.useEffect(() => {
+    const fetchAndProcessData = async () => {
+      const fetchedProducts = await fetchProducts()
+      setProducts(fetchedProducts)
+      processData(fetchedProducts)
+    }
+
+    fetchAndProcessData()
   }, [])
 
+  // Calcula o total de produtos cadastrados
+  const totalProducts = React.useMemo(() => {
+    return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
+  }, [chartData])
+
   return (
-    <Card className="flex flex-col h-full ">
+    <Card className="flex  flex-col h-full ">
+
       <CardHeader className="items-center pb-0 ">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Quantidade de produtos</CardTitle>
+        <CardDescription>Janeiro - Março 2025</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-0  content-center ">
+      <CardContent className="flex-1 pb-0 content-center ">
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square max-h-[250px]"
@@ -95,14 +118,14 @@ export function PieCharData() {
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {totalVisitors.toLocaleString()}
+                          {totalProducts.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          Produtos
                         </tspan>
                       </text>
                     )
@@ -115,12 +138,10 @@ export function PieCharData() {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Atualizado<TrendingUp className="h-4 w-4" />
         </div>
       </CardFooter>
     </Card>
+
   )
 }

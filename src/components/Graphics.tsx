@@ -1,4 +1,3 @@
-import { BarCharData } from "./ui/bar-char";
 import { PieCharData } from "./ui/pie-char";
 
 
@@ -11,11 +10,6 @@ export default function Graphics() {
             <div className="flex-1 bg-white dark:bg-gray-800 rounded-lg p-2 shadow">
 
               <PieCharData />
-            </div>
-
-            {/* Gráfico de Barras */}
-            <div className="flex-1 bg-white dark:bg-gray-800 rounded-lg p-2 shadow">
-              <BarCharData />
             </div>
           </div>
         </div>

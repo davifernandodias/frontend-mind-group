@@ -21,7 +21,6 @@ export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
-
     if(id !== userId){
       router.push(`/painel/${userId}`);  
       console.log("rota errada")
@@ -73,11 +72,13 @@ export default function Page() {
         {products.map((product) => (
           <CardProducts
             key={product.id}
+            productId={product.id}
             name={product.name}
             description={product.description}
             price={product.price}
             src={`data:image/jpeg;base64,${product.image}`}
             seeIsActive={true}
+            userId={userId}
           />
         ))}
       </div>
