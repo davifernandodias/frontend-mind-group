@@ -48,8 +48,8 @@ export default function ProductPage() {
   }
 
   return (
-    <div className="flex flex-col items-center p-6 space-y-6 bg-gray-50 rounded-md shadow-md max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-800">Edita ou deletar produto</h1>
+    <div className="flex flex-col items-center p-6 space-y-6 bg-gray-50 rounded-md dark:bg-gray-800 dark:text-white shadow-md max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold text-gray-800 dark:text-white ">Edita ou deletar produto</h1>
 
       <CardProducts
         description={product.description}
@@ -64,7 +64,7 @@ export default function ProductPage() {
       <div className="flex space-x-4">
         <Button
           variant="default"
-          className="bg-blue-600 text-white hover:bg-blue-700"
+          className=" dark:bg- dark:text-black "
           onClick={() => setUpdateDialogOpen(true)}
         >
           Editar

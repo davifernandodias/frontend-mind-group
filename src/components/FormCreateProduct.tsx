@@ -22,8 +22,8 @@ export default function FormCreateProduct({ onAddProduct }: FormCreateProductPro
     e.preventDefault();
 
     // Verifica se a imagem é maior que 20KB
-    if (image && image.size > 20 * 1024) {
-      toast.error("A imagem não pode exceder 20KB.");
+    if (image && image.size > 60 * 1024) {
+      toast.error("A imagem não pode exceder 60KB.");
       return;
     }
 
@@ -119,8 +119,7 @@ export default function FormCreateProduct({ onAddProduct }: FormCreateProductPro
                 className="mt-1"
                 value={price}
                 onChange={(e) => setPrice(Number(e.target.value))}
-                min={0.01} // O valor mínimo permitido é maior que 0
-                max={99999} // Limite máximo de 5 dígitos
+ 
               />
             </div>
 

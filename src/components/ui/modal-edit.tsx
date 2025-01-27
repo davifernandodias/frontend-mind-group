@@ -18,8 +18,8 @@ interface ModalEditProductProps {
   name: string;
   description: string;
   price: number;
-  image: unknown
-  onProductUpdated: () => void; // Callback para notificar o componente pai
+  image: unknown;
+  onProductUpdated: () => void;
 }
 
 export default function ModalEditProduct({
@@ -34,8 +34,9 @@ export default function ModalEditProduct({
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState(initialName);
   const [description, setDescription] = useState(initialDescription);
-  const [image, setImage] = useState<File | null>(null); // Alterando para File | null
+  const [image, setImage] = useState<File | null>(null);
   const [price, setPrice] = useState(initialPrice);
+
   const handleEditProduct = async () => {
     setIsLoading(true);
     try {
@@ -43,82 +44,88 @@ export default function ModalEditProduct({
       formData.append("name", name);
       formData.append("description", description);
       formData.append("price", price.toString());
-  
+
       if (image) {
-        formData.append("image", image); // Adiciona a imagem ao FormData
+        formData.append("image", image);
       }
-  
-      await updateProduct(idProduct, formData); // Envia o FormData para a API
-      setUpdateDialogOpen(false); // Fecha o modal após sucesso
-      onProductUpdated(); // Notifica o componente pai
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+      await updateProduct(idProduct, formData);
+      setUpdateDialogOpen(false);
+      onProductUpdated();
     } catch (err) {
+      console.error(err);
     } finally {
       setIsLoading(false);
     }
   };
-  
-  
 
   return (
     <AlertDialog open={isUpdateDialogOpen} onOpenChange={setUpdateDialogOpen}>
-      <AlertDialogContent className="fixed left-1/2 top-1/2 w-[90%] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-6 shadow-lg focus:outline-none">
-        <AlertDialogHeader>
-          <AlertDialogTitle className="text-lg font-semibold text-gray-900">
-            Edição do produto
+      <AlertDialogContent className="fixed left-1/2 top-1/2 w-[90%] max-w-lg -translate-x-1/2 -translate-y-1/2 dark:bg-black rounded-xl bg-white shadow-xl p-6 focus:outline-none border border-gray-200">
+        <AlertDialogHeader className="pb-6">
+          <AlertDialogTitle className="text-xl font-semibold text-gray-800 dark:text-white">
+            Editar Produto
           </AlertDialogTitle>
         </AlertDialogHeader>
-        <form className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Nome
+        <form className="space-y-6 dark:text-white">
+          <div className="space-y-1">
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-white">
+              Nome do Produto
             </label>
             <input
+              id="name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
-          <div>
-              <label htmlFor="image" className="text-sm font-medium">
-                Imagem
-              </label>
-              <input
-                id="image"
-                name="image"
-                type="file"
-                className="mt-1"
-                accept="image/*"
-                onChange={(e) => setImage(e.target.files?.[0] || null)}
-              />
-            </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
+          
+          <div className="space-y-1">
+            <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-white">
+              Imagem do Produto
+            </label>
+            <input
+              id="image"
+              name="image"
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files?.[0] || null)}
+              className="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-white">
               Descrição
             </label>
             <textarea
+              id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              rows={4}
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
+
+          <div className="space-y-1">
+            <label htmlFor="price" className="block text-sm font-medium text-gray-700 dark:text-white">
               Preço
             </label>
             <input
+              id="price"
               type="number"
               value={price}
               onChange={(e) => setPrice(Number(e.target.value))}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
         </form>
-        <AlertDialogFooter className="mt-4 flex flex-col space-y-2 sm:space-y-0 sm:flex-row sm:justify-end sm:space-x-2">
+
+        <AlertDialogFooter className="mt-6 flex justify-end space-x-4">
           <Button
             variant="default"
-            className="bg-gray-200 text-gray-800 hover:bg-gray-300 w-full sm:w-auto"
+            className="w-full sm:w-auto bg-gray-200 text-gray-800 hover:bg-gray-300"
             onClick={() => setUpdateDialogOpen(false)}
             disabled={isLoading}
           >
@@ -127,12 +134,12 @@ export default function ModalEditProduct({
           <Button
             variant="destructive"
             onClick={handleEditProduct}
-            className={`bg-green-600 text-white hover:bg-green-700 w-full sm:w-auto ${
+            className={`w-full sm:w-auto bg-indigo-600 text-white hover:bg-indigo-700 ${
               isLoading ? "opacity-50 cursor-not-allowed" : ""
             }`}
             disabled={isLoading}
           >
-            {isLoading ? "Editando..." : "Editar"}
+            {isLoading ? "Atualizando..." : "Salvar Alterações"}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

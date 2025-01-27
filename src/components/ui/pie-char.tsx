@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { TrendingUp } from "lucide-react"
-import { Label, Pie, PieChart } from "recharts"
+import * as React from "react";
+import { TrendingUp } from "lucide-react";
+import { Label, Pie, PieChart } from "recharts";
 
 import {
   Card,
@@ -11,95 +11,92 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
-import { fetchProducts } from "@/services/productService"
+} from "@/components/ui/chart";
+import { fetchProducts } from "@/services/productService";
+
 const chartConfig = {
   low: {
-    label: "Até R$ 200",
+    label: "Até R$ 200 ->",
     color: "blue",
   },
   medium: {
-    label: "De R$ 200 a R$ 700",
+    label: "De R$ 200 a R$ 700\u200B ->",
     color: "hsl(var(--chart-1))",
   },
   high: {
-    label: "Acima de R$ 1000",
+    label: "Acima de R$ 700 ->",
     color: "red",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export function PieCharData() {
-  const [products, setProducts] = React.useState<any[]>([])
-  const [chartData, setChartData] = React.useState<any[]>([])
+  const [products, setProducts] = React.useState<any[]>([]);
+  const [chartData, setChartData] = React.useState<any[]>([]);
 
   // Função para processar os dados dos produtos e organizar por faixa de preço
   const processData = (products: any[]) => {
-    const priceCategories: { [key: string]: number } = { low: 0, medium: 0, high: 0 }
+    const priceCategories: { [key: string]: number } = { low: 0, medium: 0, high: 0 };
 
     // Processa os produtos por faixa de preço
     products.forEach((product) => {
       if (product.price <= 200) {
-        priceCategories.low += 1
+        priceCategories.low += 1;
       } else if (product.price > 200 && product.price <= 700) {
-        priceCategories.medium += 1
-      } else if (product.price > 1000) {
-        priceCategories.high += 1
+        priceCategories.medium += 1;
+      } else if (product.price > 700) {
+        priceCategories.high += 1;
       }
-    })
+    });
 
     // Mapeia os dados para a estrutura do gráfico
     const data = Object.keys(priceCategories).map((key) => ({
-      browser: chartConfig[key]?.label || key,
-      visitors: priceCategories[key],
+      name: chartConfig[key]?.label || key,  // Altera 'browser' para 'name'
+      value: priceCategories[key],  // Altera 'visitors' para 'value'
       fill: chartConfig[key]?.color || "gray",
-    }))
+    }));
 
-    setChartData(data)
-  }
+    setChartData(data);
+  };
 
   // Faz a requisição dos produtos e processa os dados
   React.useEffect(() => {
     const fetchAndProcessData = async () => {
-      const fetchedProducts = await fetchProducts()
-      setProducts(fetchedProducts)
-      processData(fetchedProducts)
-    }
+      const fetchedProducts = await fetchProducts();
+      setProducts(fetchedProducts);
+      processData(fetchedProducts);
+    };
 
-    fetchAndProcessData()
-  }, [])
+    fetchAndProcessData();
+  }, []);
 
   // Calcula o total de produtos cadastrados
   const totalProducts = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
-  }, [chartData])
+    return chartData.reduce((acc, curr) => acc + curr.value, 0);
+  }, [chartData]);
 
   return (
-    <Card className="flex  flex-col h-full ">
-
-      <CardHeader className="items-center pb-0 ">
+    <Card className="flex flex-col h-full">
+      <CardHeader className="items-center pb-0">
         <CardTitle>Quantidade de produtos</CardTitle>
         <CardDescription>Janeiro - Março 2025</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-0 content-center ">
+      <CardContent className="flex-1 pb-0 content-center">
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square max-h-[250px]"
         >
           <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
             <Pie
               data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
+              dataKey="value"  // Atualiza para 'value'
+              nameKey="name"  // Atualiza para 'name'
               innerRadius={60}
               strokeWidth={5}
             >
@@ -128,7 +125,7 @@ export function PieCharData() {
                           Produtos
                         </tspan>
                       </text>
-                    )
+                    );
                   }
                 }}
               />
@@ -142,6 +139,5 @@ export function PieCharData() {
         </div>
       </CardFooter>
     </Card>
-
-  )
+  );
 }

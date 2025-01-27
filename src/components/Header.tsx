@@ -19,7 +19,7 @@ export function DashboardHeader() {
 
 
   return (
-    <header className="flex items-center justify-between px-6 py-4 h-auto bg-zinc-50 dark:bg-stone-900">
+    <header className="flex items-center justify-between px-6 py-4 h-auto bg-zinc-50 dark:bg-black">
       {/* Profile Icon */}
       <div className="flex items-center gap-4">
         <DropdownMenu>
