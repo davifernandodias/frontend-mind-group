@@ -37,6 +37,7 @@ export const fetchProducts = async () => {
     throw err;
   }
 };
+
 export const createProduct = async (formData: FormData) => {
   try {
     const userString = localStorage.getItem("user");

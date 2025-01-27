@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import CardProducts from "@/components/ui/card-products";
@@ -50,13 +49,17 @@ export default function ProductPage() {
 
   return (
     <div className="flex flex-col items-center p-6 space-y-6 bg-gray-50 rounded-md shadow-md max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-800">Editar Produto</h1>
+      <h1 className="text-2xl font-bold text-gray-800">Edita ou deletar produto</h1>
 
       <CardProducts
         description={product.description}
         name={product.name}
         price={product.price}
+        src={`data:image/jpeg;base64,${product.image}`}
+        seeIsActive={false}
       />
+
+
 
       <div className="flex space-x-4">
         <Button
