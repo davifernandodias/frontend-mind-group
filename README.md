@@ -23,12 +23,12 @@ Siga os passos abaixo para configurar o ambiente de desenvolvimento local:
 
 1. Clone este repositório:
     ```
-    git clone https://github.com/usuario/projeto.git
+    git clone https://github.com/davifernandodias/frontend-mind-group
     ```
 
 2. Navegue até o diretório do projeto:
     ```
-    cd projeto
+    cd /davifernandodias/frontend-mind-group
     ```
 
 3. Instale as dependências:
@@ -42,6 +42,8 @@ Siga os passos abaixo para configurar o ambiente de desenvolvimento local:
     ```
 
 Agora, o sistema estará disponível localmente em `http://localhost:3000`.
+
+
 
 - **Next.js**: Framework React para renderização do lado do servidor.
 - **Tailwind CSS**: Framework de CSS para um design responsivo e moderno.
