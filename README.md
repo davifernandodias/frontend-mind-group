@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend Case - Sistema de Estoque
 
-## Getting Started
+![Imagem](https://github.com/user-attachments/assets/34e52747-01f0-475d-bcba-d9ca230e1cb9)
 
-First, run the development server:
+Este é um sistema simples de gerenciamento de estoque, com funcionalidades de cadastro, edição, exclusão e visualização de produtos. O usuário pode gerenciar os produtos, incluindo quantidade, foto e outras informações, e o painel inicial exibe alertas de quantidade de produto.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Começando
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Essas instruções permitirão que você tenha uma cópia do projeto em operação na sua máquina local para fins de desenvolvimento e teste.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Consulte **[Implantação](#-implantação)** para detalhes sobre como implantar o projeto.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 📋 Pré-requisitos
 
-## Learn More
+Antes de começar, você precisa ter as seguintes ferramentas instaladas:
 
-To learn more about Next.js, take a look at the following resources:
+- **Node.js**: Certifique-se de ter o Node.js instalado. Você pode baixá-lo [aqui](https://nodejs.org/).
+- **npm ou yarn**: Gerenciador de pacotes para instalar dependências.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🔧 Instalação
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Siga os passos abaixo para configurar o ambiente de desenvolvimento local:
 
-## Deploy on Vercel
+1. Clone este repositório:
+    ```
+    git clone https://github.com/davifernandodias/frontend-mind-group
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. Navegue até o diretório do projeto:
+    ```
+    cd /davifernandodias/frontend-mind-group
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. Instale as dependências:
+    ```
+    npm install
+    ```
+
+4. Execute o projeto em modo de desenvolvimento:
+    ```
+    npm run dev
+    ```
+
+Agora, o sistema estará disponível localmente em `http://localhost:3000`.
+
+
+
+- **Next.js**: Framework React para renderização do lado do servidor.
+- **Tailwind CSS**: Framework de CSS para um design responsivo e moderno.
+- **Radix UI**: Biblioteca de componentes acessíveis para UI.
+- **Chart.js & Recharts**: Bibliotecas para visualização de gráficos.
+- **Lucide React**: Conjunto de ícones para interfaces de usuário.
+
