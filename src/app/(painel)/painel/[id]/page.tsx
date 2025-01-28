@@ -15,6 +15,7 @@ export default function Page() {
   const [error, setError] = useState<string | null>(null); // Estado para controlar erros
   // eslint-disable-next-line prefer-const
   const params = useParams<{ user: string }>();
+  // eslint-disable-next-line prefer-const
   let userId = JSON.parse(localStorage.getItem("user") || '{}')?.id;
 
   const { id } = params
@@ -56,9 +57,7 @@ export default function Page() {
     return <p>Carregando produtos...</p>; // Mensagem de carregamento
   }
 
-  if (error) {
-    return <p>{error}</p>; // Mensagem de erro
-  }
+
 
   return (
     <div className="container mx-auto p-6 ">

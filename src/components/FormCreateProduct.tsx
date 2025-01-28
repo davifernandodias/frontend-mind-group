@@ -39,6 +39,7 @@ export default function FormCreateProduct({ onAddProduct }: FormCreateProductPro
       formData.append("description", description);
       formData.append("price", price.toString());
       if (image) {
+        console.log(image)
         formData.append("image", image); // Adiciona a imagem no FormData
       }
 

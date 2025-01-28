@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { updateProduct } from "@/services/productService";
+import { toast } from "sonner";
+
 import {
   AlertDialog,
   AlertDialogContent,
@@ -38,6 +40,11 @@ export default function ModalEditProduct({
   const [price, setPrice] = useState(initialPrice);
 
   const handleEditProduct = async () => {
+    if (image && image.size > 60 * 1024) {
+      toast.error("A imagem não pode exceder 60KB.");
+      return;
+    }
+
     setIsLoading(true);
     try {
       const formData = new FormData();
@@ -52,8 +59,10 @@ export default function ModalEditProduct({
       await updateProduct(idProduct, formData);
       setUpdateDialogOpen(false);
       onProductUpdated();
+      toast.success("Produto atualizado com sucesso!");
     } catch (err) {
       console.error(err);
+      toast.error("Erro ao atualizar o produto.");
     } finally {
       setIsLoading(false);
     }
@@ -80,7 +89,7 @@ export default function ModalEditProduct({
               className="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
-          
+
           <div className="space-y-1">
             <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-white">
               Imagem do Produto

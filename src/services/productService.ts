@@ -35,11 +35,12 @@ export const fetchProducts = async () => {
 };
 
 export const createProduct = async (formData: FormData) => {
-  try {
+  try { 
     const userString = localStorage.getItem("user");
     const user = userString ? JSON.parse(userString) : null;
     const userId = user ? user.id : undefined;  
     const token = localStorage.getItem("token") || undefined;
+    console.log(userId)
 
     const response = await fetch(`${urlApi}/products/${userId}`, {
       method: "POST",
@@ -52,15 +53,20 @@ export const createProduct = async (formData: FormData) => {
     });
 
     if (!response.ok) {
-      throw new Error(`Erro ao criar o produto: ${response.statusText}`);
+      const errorDetails = await response.text();  // Obtém o texto da resposta
+      console.error("Erro ao criar produto:", errorDetails);
+          throw new Error(`Erro ao criar o produto: ${response.statusText}`);
     }
 
     const data = await response.json();
+    console.log(data)
     return data;
   } catch (err) {
+    console.log(err)
     console.error("Erro ao criar produto:", err);
     throw err;
   }
+
 };
 
 

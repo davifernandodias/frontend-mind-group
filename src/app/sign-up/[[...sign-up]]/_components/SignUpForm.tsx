@@ -31,7 +31,7 @@ export default function CreateUserForm() {
 
     try {
       const newUser = await createUser({ email, firstName, lastName, password });
-      localStorage.setItem("token", newUser.token);  // Salva o token após criar o usuário
+      localStorage.setItem("token", newUser.token);
       localStorage.setItem("user", JSON.stringify(newUser.user));  // Salva o usuário no localStorage
       router.push(`/painel/${newUser.user.id}`);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
