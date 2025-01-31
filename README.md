@@ -8,7 +8,6 @@ Este é um sistema simples de gerenciamento de estoque, com funcionalidades de c
 
 Essas instruções permitirão que você tenha uma cópia do projeto em operação na sua máquina local para fins de desenvolvimento e teste.
 
-Consulte **[Implantação](#-implantação)** para detalhes sobre como implantar o projeto.
 
 ### 📋 Pré-requisitos
 
