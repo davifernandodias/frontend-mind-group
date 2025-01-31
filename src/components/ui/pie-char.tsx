@@ -85,6 +85,10 @@ export function PieCharData() {
       <CardHeader className="items-center pb-0">
         <CardTitle>Quantidade de produtos</CardTitle>
         <CardDescription>Janeiro - Março 2025</CardDescription>
+        {totalProducts === 0 && (
+          <CardTitle className="relative top-24 text-2xl">Não a produtos cadastrados</CardTitle>
+
+        )}
       </CardHeader>
       <CardContent className="flex-1 pb-0 content-center">
         <ChartContainer

@@ -21,7 +21,7 @@ export function ProductBarHeader() {
   <MenubarTrigger className="text-sm">Produtos</MenubarTrigger>
   <MenubarContent>
     <MenubarItem >
-      <Link href={`/painel/${id}/produto`}>Ver Produtos</Link><MenubarShortcut>⌘</MenubarShortcut>
+      <Link href={`/painel/${id}/produto`}>Cadastrar Produtos</Link><MenubarShortcut>⌘</MenubarShortcut>
     </MenubarItem>
   </MenubarContent>
 </MenubarMenu>

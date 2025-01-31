@@ -2,7 +2,7 @@ import { ProductBarHeader } from "./ui/header-collapse-products";
 import { ModeToggle } from "./ui/modeToggle";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import { Button } from "./ui/button";
 
 export function DashboardHeader() {

@@ -17,6 +17,7 @@ export default function FormCreateProduct({ onAddProduct }: FormCreateProductPro
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState<File | null>(null);
+  const [loading, setLoading ] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +35,7 @@ export default function FormCreateProduct({ onAddProduct }: FormCreateProductPro
     }
 
     try {
+      setLoading(true);
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
@@ -51,6 +53,7 @@ export default function FormCreateProduct({ onAddProduct }: FormCreateProductPro
 
       // Exibe uma notificação de sucesso
       toast.success("Produto criado com sucesso!");
+      setLoading(false)
 
       // Limpa os campos do formulário
       setName('');
@@ -142,9 +145,12 @@ export default function FormCreateProduct({ onAddProduct }: FormCreateProductPro
             {/* Botão Salvar */}
             <Button
               type="submit"
-              className="w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-white dark:text-gray-800"
+              className="w-full  dark:bg-white dark:text-gray-800"
             >
-              Salvar Produto
+              {
+                !loading ? "Salvar Produto" : "Salvando..."
+
+              }
             </Button>
           </form>
         </CardContent>
